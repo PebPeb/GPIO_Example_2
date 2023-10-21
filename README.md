@@ -2,7 +2,7 @@ mount linux build directory here
 
 # Windows
 
-Creating a symbolic link on Windows. The link folder must not exist. This links from the target to the link meaning that the files in target_folder show up in link_folder
+Creating a symbolic link on Windows. The link folder must not exist. This links from the target to the link meaning that the files in target_folder show up in link_folder. **Must be executed as admin in cmd**.
 
 ```batch
 mklink /D <link_folder> <target_folder>

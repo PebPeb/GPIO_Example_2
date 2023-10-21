@@ -1,2 +1,6 @@
 linux_build/
 linux_build
+
+# Just Settings
+#   Keeps the c_cpp_properties.json because can have multiple configurations
+.vscode/settings.json
