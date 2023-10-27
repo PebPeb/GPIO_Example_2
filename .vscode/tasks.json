@@ -1,0 +1,23 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build Kernel Module",
+        "type": "shell",
+        "command": "ssh",
+            "args": [
+                "dev@192.168.56.2",
+                "'source ~/Documents/petalinux_install/2022.1/settings.sh && cd ~/Documents/petalinux_projects/GPIO_Example_2/ && petalinux-build -c mymodule'"
+            ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+         },
+         "presentation": {
+           "panel": "new"
+         }
+       }
+    ]
+  }

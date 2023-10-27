@@ -10,9 +10,7 @@
 MODULE_LICENSE("GPL");
 
 int init_module(void) {
-  
-  pr_info("Hello world 1.\n");
-  //printk(KERN_INFO "Hello world 1.\n");
+  printk(KERN_INFO "Hello world 1.\n");
 
   return 0;
 }
