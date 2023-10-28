@@ -14,7 +14,13 @@ import glob
 #         - ls;
 #         - ls;
 
+# Global settings
 script_directory = os.path.dirname(os.path.abspath(__file__))
+if sys.platform.startswith('linux'):        # Linux
+  divider = "/"
+elif sys.platform.startswith('win'):        # Windows
+  divider = "\\"
+
 
 def main(): 
   if len(sys.argv) > 1: # If an argument
@@ -39,17 +45,24 @@ def main():
 
 
 def parse_yaml(file_name):
-  if sys.platform.startswith('linux'):        # Linux
-    divider = "/"
-  elif sys.platform.startswith('win'):        # Windows
-    divider = "\\"
-
   with open(script_directory + divider + file_name, "r") as file:
     template = Template(file.read())
+  
+  data = {}
+  with open(script_directory + divider + ".." + divider + "program.conf", 'r') as file:
+    for line in file:
+    # Split each line into key and value using the '=' as a separator
+      parts = line.strip().split("=")
 
-  data = {
-    'BUILD_MACHINE_IP': '192.168.1.100',
-  }
+      # Check if the line has a key-value pair
+      if len(parts) == 2:
+        key, value = parts
+        data[key] = value
+
+  for key, value in data.items():
+      for key_1, value_1 in data.items():
+          value = value.replace('${' + key_1 + '}', value_1)
+      data[key] = value
 
   rendered_yaml = template.render(data)
 
@@ -82,11 +95,7 @@ def parse_task_args(args):
   return arg
 
 
-
-
 if __name__ == "__main__":
     main()
-
-
 
 
