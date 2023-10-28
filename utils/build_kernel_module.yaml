@@ -1,0 +1,7 @@
+
+# Command structure for compiling 
+
+Commands:
+  - command: scp
+    args: 
+    args-quote:
