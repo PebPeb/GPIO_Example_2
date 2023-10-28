@@ -1,4 +1,11 @@
 import re
+import os
+import sys
+
+if sys.platform.startswith('linux'):        # Linux
+    divider = "/"
+elif sys.platform.startswith('win'):        # Windows
+    divider = "\\"
 
 # Initialize a dictionary to store the variables
 variables = {}
@@ -8,13 +15,16 @@ def evaluate_expression(match):
     expr = match.group(0)
     var_name = expr.split('=')[0]
     var_value = expr.split('=')[1]
+    print(variables.items())
     for key, value in variables.items():
+        print(var_value)
+        print()
         var_value = var_value.replace('${' + key + '}', str(value))
-    print(var_value)
-    return f"{var_name}={eval(var_value, variables)}"
+    return f"{var_name}={var_value}"
 
 # Read the input file
-with open('/home/developer/Documents/home_workspace/GPIO_Example_2/program.conf', 'r') as file:
+script_directory = os.path.dirname(os.path.abspath(__file__))
+with open(script_directory + divider + ".." + divider + "program.conf", 'r') as file:
     content = file.read()
 
 # Use regular expressions to find variable assignments and evaluate expressions
