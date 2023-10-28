@@ -79,19 +79,28 @@ def execute(task):
       pass
     else:
       command = command + parse_task_args(x["args"])
-      
-  print(command)
+    
+    print(command)
+    try:
+      os.system(command)
+    except:
+      print("command failed")
+      exit(-1)
 
-def parse_task_args(args):
+def parse_task_args(args, first_quote=False):
   arg = ""
   for x in args:
     if isinstance(x, dict) and 'quote' in x:
       if x["quote"] == None:
         pass
       else:
-        arg = arg + " '" + parse_task_args(x["quote"]) + "'"
+        arg = arg + " \"" + parse_task_args(x["quote"], True) + "\""
     else:
-      arg = arg + " " + x
+      if first_quote:
+        arg = arg + x
+        first_quote = False
+      else:
+        arg = arg + " " + x
   return arg
 
 

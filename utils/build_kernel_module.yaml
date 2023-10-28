@@ -4,7 +4,13 @@
 Commands:
   - command: scp
     args:
-      - dev@{{ BUILD_MACHINE_IP }}
       - quote:
-        - ls;
-        - ls;
+        - {{ PROJECT_DIR }}\build_files\Makefile
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files
+  - command: ssh
+    args:
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}
+      - quote:
+        - source ~/Documents/petalinux_install/2022.1/settings.sh &&
+        - cd ~/Documents/petalinux_projects/GPIO_Example_2/ && 
+        - petalinux-build -c mymodule
