@@ -3,5 +3,8 @@
 
 Commands:
   - command: scp
-    args: 
-    args-quote:
+    args:
+      - dev@{{ BUILD_MACHINE_IP }}
+      - quote:
+        - ls;
+        - ls;
