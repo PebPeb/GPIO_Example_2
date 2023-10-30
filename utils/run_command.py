@@ -4,6 +4,7 @@ from jinja2 import Template                 # For templating my .yaml files
 import yaml
 import sys
 import glob
+import argparse
 
 # Example.yaml
 # Commands:
@@ -23,24 +24,37 @@ elif sys.platform.startswith('win'):        # Windows
 
 
 def main(): 
-  if len(sys.argv) > 1: # If an argument
-    yaml_files = glob.glob(os.path.join(script_directory, "*.yaml"))  
-    yaml_files_without_extension = [os.path.splitext(os.path.basename(file))[0] for file in yaml_files]
 
-    if sys.argv[1] in yaml_files_without_extension:
-      task = parse_yaml(sys.argv[1] + ".yaml")
-      execute(task)
+  parser = argparse.ArgumentParser(description="Executes .yaml command structure that builds up a task")
+  
+  parser.add_argument("default_argument", nargs="?", default="", help="Task to execute")
+  parser.add_argument("-p", "--print", action="store_true", help="Turn on print")
+
+  args = parser.parse_args()
+
+  yaml_files = glob.glob(os.path.join(script_directory, "*.yaml"))  
+  yaml_files_without_extension = [os.path.splitext(os.path.basename(file))[0] for file in yaml_files]
+  
+  if not(args.default_argument == ""): # If an argument
+    if args.default_argument in yaml_files_without_extension:
+      task = parse_yaml(args.default_argument + ".yaml")
+      if args.print:
+        execute(task, True)
+      else:
+        execute(task)
     else:
-      print("Task Not Found")
-      print()
+      print("Task Not Found\n")
       print("-- Valid Tasks --")
       for x in yaml_files_without_extension:
         print(x)
       print()
       exit()
-
   else:
-    print("No Task Provided")
+    print("No Task Provided\n")
+    print("-- Valid Tasks --")
+    for x in yaml_files_without_extension:
+      print(x)
+    print()
     exit()
 
 
@@ -71,7 +85,7 @@ def parse_yaml(file_name):
   task = yaml.safe_load(rendered_yaml)
   return task
 
-def execute(task):
+def execute(task, print_task=False):
   commands = []
   for x in task["Commands"]:                              # Commands
     command = x["command"]                                # command
@@ -79,10 +93,11 @@ def execute(task):
       pass
     else:
       command = command + parse_task_args(x["args"])
-    
-    print(command)
     try:
-      os.system(command)
+      if (print_task):
+        print(command)
+      else:
+        os.system(command)
     except:
       print("command failed")
       exit(-1)
