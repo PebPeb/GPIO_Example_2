@@ -8,15 +8,20 @@
 #include <linux/init.h>
 
 MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Bryce Keen");
 
-int init_module(void) {
+
+static int __init init_mymodule(void) {
   printk(KERN_INFO "Hello world 1.\n");
 
   return 0;
 }
 
-void cleanup_module(void) {
+static void __exit cleanup_mymodule(void) {
   printk(KERN_INFO "Goodbye world 1.\n");
 
 }
 
+
+module_init(init_mymodule);
+module_exit(cleanup_mymodule);
