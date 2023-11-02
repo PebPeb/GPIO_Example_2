@@ -6,9 +6,8 @@
       {
         "label": "Build Kernel Module",
         "type": "shell",
-        "command": ["scp '${workspaceFolder}\\build_files\\Makefile' dev@192.168.56.2:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files;",
+        "command": ["scp '${workspaceFolder}\\release\\Makefile' dev@192.168.56.2:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files;",
           "scp '${workspaceFolder}\\src\\hello-1.c' dev@192.168.56.2:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files;",
-          "scp '${workspaceFolder}\\build_files\\mymodule.bb' dev@192.168.56.2:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/;",
           "ssh dev@192.168.56.2 'cd /home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files && make';", 
           //"ssh dev@192.168.56.2 'source ~/Documents/petalinux_install/2022.1/settings.sh && cd ~/Documents/petalinux_projects/GPIO_Example_2/ && petalinux-build -c mymodule';",
           "scp dev@192.168.56.2:/home/dev/Documents/petalinux_projects/GPIO_Example_2/build/tmp/sysroots-components/zynq_generic/mymodule/lib/modules/5.15.19-xilinx-v2022.1/extra/hello-1.ko '${workspaceFolder}'"

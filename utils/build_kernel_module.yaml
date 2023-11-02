@@ -5,12 +5,34 @@ Commands:
   - command: scp
     args:
       - quote:
-        - {{ PROJECT_DIR }}\build_files\Makefile
-      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:/home/dev/Documents/petalinux_projects/GPIO_Example_2/project-spec/meta-user/recipes-modules/mymodule/files
+        - {{ PROJECT_DIR }}\release\*
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
+  - command: scp
+    args:
+      - quote:
+        - {{ PROJECT_DIR }}\src\*
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
   - command: ssh
     args:
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}
       - quote:
-        - source ~/Documents/petalinux_install/2022.1/settings.sh &&
-        - cd ~/Documents/petalinux_projects/GPIO_Example_2/ && 
-        - petalinux-build -c mymodule
+        - cd {{ BUILD_MACHINE_WORKING_DIR }} &&
+        - make
+  - command: scp
+    args:
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}/*.ko
+      - quote:
+        - {{ PROJECT_DIR }}
+  - command: ssh
+    args:
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}
+      - quote:
+        - cd {{ BUILD_MACHINE_WORKING_DIR }} &&
+        - make clean
+  # - command: ssh
+  #   args:
+  #     - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}
+  #     - quote:
+  #       - source ~/Documents/petalinux_install/2022.1/settings.sh &&
+  #       - cd ~/Documents/petalinux_projects/GPIO_Example_2/ && 
+  #       - petalinux-build -c mymodule
