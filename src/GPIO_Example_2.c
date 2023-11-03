@@ -1,0 +1,76 @@
+/*
+ *  hello-1.c - The simplest kernel module
+ */
+
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/printk.h>
+#include <linux/init.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/kdev_t.h>
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Bryce Keen");
+
+#define DRIVER_NAME "GPIO_Example_2"
+
+// Global Vars
+static int          major_num;
+static int          num_devices = 1;
+static struct cdev  GPIO_Example_2_cdev; 
+struct class       *GPIO_Example_2_class;
+struct device      *GPIO_Example_2_device;
+
+
+// Function declarations
+static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
+
+static struct file_operations fops = { 
+    .owner = THIS_MODULE,
+    .unlocked_ioctl = device_ioctl, 
+}; 
+
+static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
+  return 0;
+}
+
+static int __init init_GPIO_Example_2(void) {
+  printk(KERN_INFO "Initializing GPIO Example 2.\n");
+
+  dev_t dev;
+
+  if(alloc_chrdev_region(&dev, 0, num_devices, DRIVER_NAME))
+    goto error;
+  cdev_init(&GPIO_Example_2_cdev, &fops);
+  if(cdev_add(&GPIO_Example_2_cdev, dev, num_devices))
+    goto error;
+
+  major_num = MAJOR(dev);
+
+  GPIO_Example_2_class = class_create(THIS_MODULE, DRIVER_NAME);
+  GPIO_Example_2_device = device_create(GPIO_Example_2_class, NULL, dev, NULL, DRIVER_NAME);
+
+  return 0;
+
+error:
+  printk(KERN_INFO "ERROR Initializing GPIO Example 2\n");
+  return -1;
+}
+
+static void __exit cleanup_GPIO_Example_2(void) {
+  printk(KERN_INFO "Destroying GPIO Example 2.\n");
+
+  dev_t dev = MKDEV(major_num, 0);
+
+  device_destroy(GPIO_Example_2_class, dev); 
+  class_destroy(GPIO_Example_2_class); 
+
+  cdev_del(&GPIO_Example_2_cdev); 
+  unregister_chrdev_region(dev, num_devices); 
+  pr_alert("%s driver removed.\n", DRIVER_NAME); 
+}
+
+
+module_init(init_GPIO_Example_2);
+module_exit(cleanup_GPIO_Example_2);
