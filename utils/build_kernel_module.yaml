@@ -5,12 +5,12 @@ Commands:
   - command: scp
     args:
       - quote:
-        - {{ PROJECT_DIR }}\release\*
+        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}\release\*
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
   - command: scp
     args:
       - quote:
-        - {{ PROJECT_DIR }}\src\*
+        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}\src\*
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
   - command: ssh
     args:
