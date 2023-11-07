@@ -24,16 +24,41 @@ struct device      *GPIO_Example_2_device;
 
 
 // Function declarations
+static int device_open(struct inode *inode, struct file *file);
 static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
+static int device_release(struct inode *inode, struct file *file);
 
 static struct file_operations fops = { 
-    .owner = THIS_MODULE,
-    .unlocked_ioctl = device_ioctl, 
+  .owner = THIS_MODULE,
+  .unlocked_ioctl = device_ioctl, 
+  .open = device_open, 
+  .release = device_release,              /* a.k.a. close */ 
 }; 
 
+static int calledi = 0;
 static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
+  calledi += 1;
+  printk(KERN_INFO "IOCTL called %d\n", calledi);
+
   return 0;
 }
+
+static int device_open(struct inode *inode, struct file *file) 
+{ 
+  pr_info("device_open(%p)\n", file); 
+
+  try_module_get(THIS_MODULE); 
+  return 0; 
+} 
+
+static int device_release(struct inode *inode, struct file *file) 
+{ 
+  pr_info("device_release(%p,%p)\n", inode, file); 
+
+  module_put(THIS_MODULE); 
+  return 0; 
+} 
+
 
 static int __init init_GPIO_Example_2(void) {
   printk(KERN_INFO "Initializing GPIO Example 2.\n");

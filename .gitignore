@@ -6,3 +6,4 @@ linux_build
 .vscode/settings.json
 
 *.ko
+program copy.conf
