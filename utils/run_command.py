@@ -62,21 +62,24 @@ def parse_yaml(file_name):
   with open(script_directory + divider + file_name, "r") as file:
     template = Template(file.read())
   
-  data = {}
+  data = {}                                                         # Key Pairs for yaml template
+  # Pull Key Pair from program.conf
   with open(script_directory + divider + ".." + divider + "program.conf", 'r') as file:
     for line in file:
-    # Split each line into key and value using the '=' as a separator
       parts = line.strip().split("=")
-
       # Check if the line has a key-value pair
       if len(parts) == 2:
         key, value = parts
-        data[key] = value
+        data[key] = value                                           
 
+  data['DIVIDER'] = divider
+
+  # Replace ${ ... } vars Key Pairs
   for key, value in data.items():
       for key_1, value_1 in data.items():
           value = value.replace('${' + key_1 + '}', value_1)
       data[key] = value
+
 
   rendered_yaml = template.render(data)
 
@@ -102,7 +105,7 @@ def execute(task, print_task=False):
       print("command failed")
       exit(-1)
 
-def parse_task_args(args, first_quote=False):
+def parse_task_args(args, first_quote=False, no_space=False):
   arg = ""
   for x in args:
     if isinstance(x, dict) and 'quote' in x:
@@ -110,10 +113,17 @@ def parse_task_args(args, first_quote=False):
         pass
       else:
         arg = arg + " \"" + parse_task_args(x["quote"], True) + "\""
+    elif isinstance(x, dict) and 'no-space' in x:
+      if x["no-space"] == None:
+        pass
+      else:
+        arg = arg + parse_task_args(x["no-space"], False, True)
     else:
       if first_quote:
         arg = arg + x
         first_quote = False
+      elif no_space:
+        arg = arg + x
       else:
         arg = arg + " " + x
   return arg

@@ -30,6 +30,33 @@
       "cStandard": "c11",
       "cppStandard": "c++14",
       "intelliSenseMode": "gcc-x64"
+    },
+    {
+      "name": "Zynq-7000 Linux Dev",
+      "includePath": [
+        "${workspaceFolder}/linux_build/build/tmp/work-shared/zynq-generic/kernel-source/include",
+        "${workspaceFolder}/linux_build/build/tmp/work-shared/zynq-generic/kernel-source/include/uapi",
+        "${workspaceFolder}/linux_build/build/tmp/work-shared/zynq-generic/kernel-source/arch/arm/include",                 
+        "${workspaceFolder}/linux_build/build/tmp/work-shared/zynq-generic/kernel-source/arch/arm/include/uapi",
+        "${workspaceFolder}/linux_build/build/tmp/work/zynq_generic-xilinx-linux-gnueabi/linux-xlnx/5.15.19+gitAUTOINC+b0c1be301e-r0/linux-zynq_generic-standard-build/include",
+        "${workspaceFolder}/linux_build/build/tmp/work/zynq_generic-xilinx-linux-gnueabi/linux-xlnx/5.15.19+gitAUTOINC+b0c1be301e-r0/linux-zynq_generic-standard-build/arch/arm/include/generated",
+        "${workspaceFolder}/linux_build/build/tmp/work/zynq_generic-xilinx-linux-gnueabi/linux-xlnx/5.15.19+gitAUTOINC+b0c1be301e-r0/linux-zynq_generic-standard-build/arch/arm/include/generated/uapi/"
+      ],
+      "forcedInclude": [
+        "${workspaceFolder}/linux_build/build/tmp/work-shared/zynq-generic/kernel-source/include/linux/kconfig.h"
+      ],
+
+      "defines": [
+        "MODULE",
+        "__KERNEL__"
+      ],
+      "compilerArgs": [
+        "-nostdinc"
+      ],
+      "compilerPath": "",
+      "cStandard": "c11",
+      "cppStandard": "c++14",
+      "intelliSenseMode": "gcc-x64"
     }
   ],
   "version": 4
