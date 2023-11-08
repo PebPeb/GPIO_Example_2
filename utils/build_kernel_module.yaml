@@ -5,17 +5,25 @@ Commands:
   - command: scp
     args:
       - quote:
-        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}{{ DIVIDER }}release{{ DIVIDER }}
-      - no-space:
-        - '*'
+        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}{{ DIVIDER }}release{{ DIVIDER }}*
+      # - no-space:
+      #   - '*'
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
   - command: scp
     args:
       - quote:
-        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}{{ DIVIDER }}src{{ DIVIDER }}
-      - no-space:
-        - '*'
+        - {{ PROJECT_DIR }}{{ DRIVER_SRC_DIR }}{{ DIVIDER }}src{{ DIVIDER }}*
+      # - no-space:
+      #   - '*'
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}
+  - command: scp
+    args:
+      - -r
+      - quote:
+        - {{ PROJECT_DIR }}{{ DRIVER_INCLUDE_DIR }}
+      # - no-space:
+      #   - '*'
+      - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}:{{ BUILD_MACHINE_WORKING_DIR }}/linux
   - command: ssh
     args:
       - {{ BUILD_MACHINE_USER }}@{{ BUILD_MACHINE_IP }}

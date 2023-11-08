@@ -10,6 +10,8 @@
 #include <linux/cdev.h>
 #include <linux/kdev_t.h>
 
+#include "linux/GPIO-fs.h"
+
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Bryce Keen");
 
@@ -40,6 +42,21 @@ static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
   calledi += 1;
   printk(KERN_INFO "IOCTL called %d\n", calledi);
 
+  switch(cmd)
+  {
+    case GPIO_CMD_SET_LED:
+      struct GPIO_args data;
+      if (copy_from_user(&data, (const void*)arg, sizeof(data))) {
+        return -1;
+      } else {
+        printk(KERN_INFO "IOCTL called %p\n", data.LED);
+      }
+
+      break;
+    default:
+      return -1;
+      break;
+  }
   return 0;
 }
 
