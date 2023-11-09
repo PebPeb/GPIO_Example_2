@@ -10,7 +10,7 @@
 #include "linux/GPIO-fs.h"
 
 
-int main() {
+int main(int argc, char *argv[]) {
     int fd = open("/dev/GPIO_Example_2", O_RDWR); // Replace "/dev/your_device" with the actual device file path
 
     if (fd < 0) {
@@ -19,7 +19,7 @@ int main() {
     }
 
     struct GPIO_args data;
-    data.LED = 0x3;
+    data.LED = atoi(argv[1]);
 
     int ioctl_result = ioctl(fd, GPIO_CMD_SET_LED, &data); // Replace YOUR_IOCTL_COMMAND with the actual IOCTL command number
 

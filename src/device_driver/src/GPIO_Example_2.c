@@ -9,6 +9,7 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/kdev_t.h>
+#include <linux/io.h>
 
 #include "linux/GPIO-fs.h"
 
@@ -23,6 +24,11 @@ static int          num_devices = 1;
 static struct cdev  GPIO_Example_2_cdev; 
 struct class       *GPIO_Example_2_class;
 struct device      *GPIO_Example_2_device;
+
+void __iomem *device_memory;
+
+// Define the physical address of the device
+resource_size_t device_phys_addr = 0x41200000;
 
 
 // Function declarations
@@ -42,6 +48,13 @@ static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
   calledi += 1;
   printk(KERN_INFO "IOCTL called %d\n", calledi);
 
+
+  device_memory = ioremap(device_phys_addr, 4096);
+  if (!device_memory) {
+      pr_err("Failed to map device memory.\n");
+      return -ENOMEM;                         // Out of memory
+  }
+
   switch(cmd)
   {
     case GPIO_CMD_SET_LED:
@@ -49,14 +62,17 @@ static long device_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
       if (copy_from_user(&data, (const void*)arg, sizeof(data))) {
         return -1;
       } else {
-        printk(KERN_INFO "IOCTL called %p\n", data.LED);
+        printk(KERN_INFO "Set LED %d\n", data.LED);
+        iowrite32(data.LED, device_memory);
       }
 
       break;
     default:
+      iounmap(device_memory);
       return -1;
       break;
   }
+  iounmap(device_memory);
   return 0;
 }
 
